@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e1116">
+<title>Sport Hub — РАЗГИЛЬДЯИ</title>
+<style>
+:root{--bg:#0e1116;--pnl:#161b23;--pnl2:#1d232d;--ln:#262e3a;--tx:#e7ecf3;--mt:#8d98a8;--ac:#ffd400;--ac2:#ff5b2e;--ok:#3ddc84;--wn:#ffb020;--bd:#ff5b5b;--r:12px;--tap:44px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+/* Respect the HTML hidden attribute even for elements with explicit display styles. */
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:hidden}
+button{font-family:inherit}
+#app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:64px 1fr;grid-template-areas:"top top" "nav main";min-height:100vh;min-height:100dvh}
+.topbar{grid-area:top;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--pnl);border-bottom:1px solid var(--ln);position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));display:grid;place-items:center;font-weight:900;color:#111;font-size:16px}
+.bn-nm{font-weight:800;font-size:16px}.bn-sb{font-size:12px;color:var(--mt)}
+.topbar-actions{display:flex;gap:8px}
+.sidenav{grid-area:nav;background:var(--pnl);border-right:1px solid var(--ln);padding:12px 8px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;position:sticky;top:64px;height:calc(100vh - 64px)}
+.nav-item{background:0;border:0;color:var(--tx);text-align:left;padding:10px 12px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;gap:8px;align-items:center}
+.nav-item:hover{background:var(--pnl2)}.nav-item.active{background:var(--ac);color:#111;font-weight:700}
+#main{grid-area:main;padding:20px 24px;overflow-y:auto;min-width:0}
+.bottomnav{display:none}
+h1{font-size:22px;margin:0 0 12px}h2{font-size:18px;margin:20px 0 12px}h3{margin:0 0 12px}
+.mut{color:var(--mt)}
+.btn{background:var(--pnl2);color:var(--tx);border:1px solid var(--ln);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;min-height:36px}
+.btn:hover{background:#242c38}
+.btn.pri{background:var(--ac);color:#111;border-color:var(--ac)}.btn.pri:hover{filter:brightness(1.08)}
+.btn.dng{background:#3a1a1a;color:#ffb3b3;border-color:#552}
+.btn.gho{background:0}.btn.sm{padding:4px 10px;font-size:12px;min-height:28px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+input,textarea,select{background:var(--pnl2);color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:8px 10px;font-size:14px;font-family:inherit;width:100%;min-height:36px}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--ac);border-color:transparent}
+textarea{min-height:80px;resize:vertical}
+label{display:block;font-size:12px;color:var(--mt);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.field{margin-bottom:12px}
+.grid{display:grid;gap:16px}.c2{grid-template-columns:repeat(2,1fr)}.c3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--pnl);border:1px solid var(--ln);border-radius:var(--r);padding:16px}
+.card h3{margin-top:0}
+.crow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bdg{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;background:var(--pnl2);color:var(--mt);border:1px solid var(--ln)}
+.bdg.ok{color:var(--ok);border-color:#1d3a2a;background:#12261c}
+.bdg.wn{color:var(--wn);border-color:#3a2f1a;background:#26200f}
+.bdg.bd{color:var(--bd);border-color:#3a1d1d;background:#261414}
+.bdg.ac{color:#111;background:var(--ac);border-color:var(--ac)}
+.empty{text-align:center;padding:40px;color:var(--mt)}
+.list{display:flex;flex-direction:column;gap:10px}
+.li{background:var(--pnl);border:1px solid var(--ln);border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.li.ck{cursor:pointer}.li.ck:hover{border-color:var(--ac)}
+.prg{height:8px;background:var(--pnl2);border-radius:6px;overflow:hidden}
+.prg>div{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .3s}
+.rs{display:flex;gap:6px;flex-wrap:wrap}
+.rs button{width:var(--tap);height:var(--tap);border-radius:8px;border:1px solid var(--ln);background:var(--pnl2);color:var(--tx);cursor:pointer;font-size:14px;font-weight:600}
+.rs button.on{background:var(--ac);color:#111;border-color:var(--ac)}
+.scene{background:var(--pnl);border:1px solid var(--ln);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--pnl2);cursor:pointer;gap:8px;flex-wrap:wrap}
+.sh:hover{background:#222a36}
+.sb{padding:14px;display:none}.scene.open .sb{display:block}
+.sn{background:var(--ac);color:#111;font-weight:800;border-radius:6px;padding:2px 8px;font-size:12px;margin-right:8px}
+.st{font-weight:700;flex:1;min-width:0}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--ln);cursor:pointer}
+.chk:last-child{border-bottom:0}
+.chk input[type=checkbox]{width:22px;height:22px;accent-color:var(--ac);flex-shrink:0}
+.done{text-decoration:line-through;color:var(--mt)}
+pre.prompt{background:#0a0d12;border:1px solid var(--ln);border-radius:8px;padding:12px;white-space:pre-wrap;word-break:break-word;font-size:13px;max-height:340px;overflow:auto;font-family:ui-monospace,Menlo,Consolas,monospace}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222a36;border:1px solid var(--ln);padding:10px 18px;border-radius:10px;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.4);max-width:calc(100vw - 32px)}
+.toast.err{border-color:var(--bd);color:#ffb3b3}.toast.ok{border-color:var(--ok);color:#b8f0d0}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:grid;place-items:center;z-index:200;padding:20px}
+.mc{background:var(--pnl);border:1px solid var(--ln);border-radius:14px;padding:20px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.mh h3{margin:0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.kc{background:var(--pnl);border:1px solid var(--ln);border-radius:12px;padding:14px}
+.kl{font-size:12px;color:var(--mt);text-transform:uppercase;letter-spacing:.5px}
+.kv{font-size:24px;font-weight:800;margin-top:4px}
+.sv{position:fixed;right:14px;bottom:14px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:14px;color:var(--mt);background:var(--pnl);border:1px solid var(--ln);z-index:40;opacity:0;transition:opacity .2s;pointer-events:none}
+.sv.show{opacity:1}.sv.saving{color:var(--wn)}.sv.saved{color:var(--ok)}.sv.error{color:var(--bd)}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;display:flex;align-items:flex-end}
+.sc{background:var(--pnl);border-radius:16px 16px 0 0;width:100%;max-height:80vh;overflow-y:auto;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+.sgh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sgg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.sgg button{background:var(--pnl2);border:1px solid var(--ln);color:var(--tx);padding:14px 10px;border-radius:10px;cursor:pointer;text-align:left;font-size:13px;min-height:var(--tap)}
+.sgf{display:flex;flex-direction:column;gap:8px;padding-top:12px;border-top:1px solid var(--ln)}
+.sgf .btn{width:100%;min-height:var(--tap)}
+.sc2{background:var(--pnl);border:1px solid var(--ln);border-radius:14px;padding:16px;margin-bottom:14px}
+.shd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.sti{font-size:18px;font-weight:800;line-height:1.25}
+.snm{background:var(--ac);color:#111;font-weight:800;border-radius:8px;padding:3px 10px;font-size:13px;white-space:nowrap}
+.sb2{margin-bottom:14px}.sb2 label{display:block;font-size:11px;color:var(--mt);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.sv2{font-size:15px;line-height:1.45}.sv2.sm{font-size:14px}
+.sac{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.sac .btn{min-height:var(--tap);font-size:14px}
+.snv{display:flex;gap:8px;margin:0 0 12px}.snv .btn{flex:1;min-height:var(--tap)}
+.snt{width:100%;min-height:70px;font-size:15px}
+.drop{border:2px dashed var(--ln);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:border-color .2s}
+.drop:hover,.drop.over{border-color:var(--ac);background:rgba(255,212,0,.05)}
+@media (max-width:820px){
+  #app{grid-template-columns:1fr;grid-template-rows:56px 1fr 64px;grid-template-areas:"top" "main" "bnav";padding-bottom:env(safe-area-inset-bottom)}
+  .topbar{padding:0 12px}.bn-sb{display:none}
+  .topbar-actions .btn{padding:6px 10px;font-size:12px;min-height:32px}
+  .sidenav{display:none}
+  #main{padding:12px 12px 20px}
+  .c2,.c3{grid-template-columns:1fr}
+  h1{font-size:19px}h2{font-size:16px;margin-top:16px}
+  .card{padding:14px}
+  .bottomnav{grid-area:bnav;display:grid;grid-template-columns:repeat(5,1fr);background:var(--pnl);border-top:1px solid var(--ln);position:sticky;bottom:0;z-index:60;padding-bottom:env(safe-area-inset-bottom)}
+  .bn-item{background:0;border:0;color:var(--mt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 0;cursor:pointer;font-size:11px}
+  .bn-item span{font-size:20px;line-height:1}.bn-item small{font-size:10px}
+  .bn-item.active{color:var(--ac)}
+  .sv{bottom:76px;right:12px}
+  .chk{padding:12px 0}.chk input[type=checkbox]{width:26px;height:26px}
+  .sh{padding:14px}
+}
+@media print{.topbar,.sidenav,.bottomnav,.sv,.btn{display:none!important}#app{display:block}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand"><span class="logo">SH</span><div><div class="bn-nm">Sport Hub</div><div class="bn-sb">РАЗГИЛЬДЯИ · Спорт без лишнего пафоса</div></div></div>
+    <div class="topbar-actions">
+      <button class="btn gho" id="btn-goto-data" title="Экспорт / Импорт / Хранение">📦 Данные</button>
+      <button class="btn gho" id="btn-help" title="Справка">?</button>
+    </div>
+  </header>
+  <nav class="sidenav">
+    <button class="nav-item active" data-view="dashboard">📊 Панель</button>
+    <button class="nav-item" data-view="projects">🗂 Проекты</button>
+    <button class="nav-item" data-view="ideas">💡 Банк идей</button>
+    <button class="nav-item" data-view="generator">🤖 Генератор</button>
+    <button class="nav-item" data-view="concept">🧭 Концепция</button>
+    <button class="nav-item" data-view="script">🎬 Сценарий</button>
+    <button class="nav-item" data-view="shoot">📹 Съёмка</button>
+    <button class="nav-item" data-view="rating">⭐ Рейтинг</button>
+    <button class="nav-item" data-view="facts">🔍 Факты</button>
+    <button class="nav-item" data-view="editnotes">✂️ Монтаж</button>
+    <button class="nav-item" data-view="publish">📤 Публикация</button>
+    <button class="nav-item" data-view="prompts">📚 Промпты</button>
+    <button class="nav-item" data-view="data">📦 Данные</button>
+  </nav>
+  <main id="main"></main>
+  <nav class="bottomnav">
+    <button class="bn-item active" data-view="dashboard"><span>📊</span><small>Панель</small></button>
+    <button class="bn-item" data-view="ideas"><span>💡</span><small>Идеи</small></button>
+    <button class="bn-item" data-view="script"><span>🎬</span><small>Сценарий</small></button>
+    <button class="bn-item" data-view="shoot"><span>📹</span><small>Съёмка</small></button>
+    <button class="bn-item" data-view="more"><span>☰</span><small>Ещё</small></button>
+  </nav>
+  <div class="sheet" id="more-sheet" hidden><div class="sc"><div class="sgh"><h3>Все разделы</h3><button class="btn gho" id="sheet-close">✕</button></div><div class="sgg" id="sheet-grid"></div></div></div>
+  <div id="toast" class="toast" hidden></div>
+  <div id="modal" class="modal" hidden><div class="mc"><div class="mh"><h3 id="modal-title"></h3><button class="btn gho" id="modal-close">✕</button></div><div id="modal-body"></div></div></div>
+  <div id="savestatus" class="sv" title="Сохранение">●</div>
+</div>
+<script>
+'use strict';
+/* ============================================================
+   Sport Hub 2.3
+   КЛЮЧЕВОЕ: НЕТ input[type=file] В HTML.
+   Импорт файла создаётся только когда пользователь нажмёт
+   "Выбрать файл" в разделе "📦 Данные".
+   ============================================================ */
+const SV=3,AV='2.3.0',IDB='sporthub_db',ST='appstate',KY='root',LS='sporthub_v3';
+const PS=['идея','подготовка','сценарий готов','готов к съёмке','съёмка начата','съёмка завершена','монтаж','готов к публикации','опубликован'];
+const IF=['обзор спортивной площадки','пробуем новый вид спорта','рейтинги и сравнения','спортивные челленджи','необычные спортивные активности','бюджетный спорт','места для тренировок','личный опыт','эксперименты','короткие видео и Shorts','пользовательские идеи'];
+const IS=['Новая','На рассмотрении','Выбрана','В подготовке','Снята','Опубликована','Отложена'];
+const FS=['Не проверено','Подтверждено','Нужно уточнить','Не использовать'];
+const DC=[{id:'safety',name:'Безопасность оборудования',weight:1},{id:'variety',name:'Разнообразие',weight:1},{id:'access',name:'Удобство',weight:1},{id:'clean',name:'Чистота',weight:1},{id:'atmo',name:'Атмосфера',weight:1},{id:'overall',name:'Общее впечатление',weight:1}];
+
+let state=null,view='dashboard',pid=null,storageMode='unknown',shootIdx=0,ideaFilter={format:'',status:'',q:''},persistWarned=false;
+
+const $=id=>document.getElementById(id);
+const uid=()=>'i-'+Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n2b=s=>esc(s).replace(/\n/g,'<br>');
+const now=()=>new Date().toISOString();
+const fmt=d=>{try{return new Date(d).toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'})}catch(_){return d||''}};
+const touch=p=>{if(p)p.updatedAt=now()};
+
+function toast(m,k){const el=$('toast');if(!el)return;el.textContent=m;el.className='toast '+(k||'');el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,2600)}
+function modal(t,h){$('modal-title').textContent=t;$('modal-body').innerHTML=h;$('modal').hidden=false}
+function closeModal(){$('modal').hidden=true}
+function setSv(k){const el=$('savestatus');if(!el)return;el.classList.add('show');el.classList.remove('saving','saved','error');if(k==='saving'){el.textContent='⏳';el.classList.add('saving')}else if(k==='saved'){el.textContent='●';el.classList.add('saved');clearTimeout(setSv._t);setSv._t=setTimeout(()=>el.classList.remove('show'),1200)}else if(k==='error'){el.textContent='!';el.classList.add('error')}}
+async function copyText(t){try{await navigator.clipboard.writeText(t);return true}catch(_){try{const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();return ok}catch(_){return false}}}
+
+/* --- checklist --- */
+function chkTemplate(kind){
+  const b=['Внешний вид и состояние площадки/места','Общий план места','Ведущий в кадре','Крупные планы оборудования','Детали и особенности','Процесс тестирования','Реакции ведущего','Плюсы','Минусы','Перебивки','Чистый звук','Запасные дубли','Финальная оценка','Заключительный кадр'];
+  if(kind==='venue')b.push('Парковка/вход','Режим работы, цены','Туалеты/раздевалки','Посетители');
+  if(kind==='sport')b.push('Экипировка и правила','Первые попытки','Прогресс','Сравнение с ожиданиями');
+  return b.map(t=>({id:uid(),text:t,done:false}));
+}
+
+/* --- project --- */
+function newProject(title){
+  const n=now();
+  return{id:uid(),title:title||'Новый выпуск',status:'идея',createdAt:n,updatedAt:n,ideaId:null,
+    concept:{goal:'',question:'',intrigue:'',path:'',keyEvents:'',successCriteria:'',conditions:'',problems:'',facts:''},
+    scripts:{},activeScriptId:null,shootChecklist:chkTemplate('general'),shootDone:{},shootNotes:{},shootReshoot:{},shootGlobalNotes:'',
+    venues:[],facts:[],editNotes:[],publish:{titles:[],description:'',coverText:'',pinnedComment:'',audienceQuestions:'',shortIdeas:'',chapters:''}};
+}
+function defaultState(){return{schemaVersion:SV,appVersion:AV,createdAt:now(),updatedAt:now(),projects:[newProject('Мой первый выпуск')],ideas:[],prompts:{}}}
+function migrateProject(p){
+  if(!p||typeof p!=='object'||Array.isArray(p))throw new Error('Некорректный проект');
+  if(!p.id)p.id=uid();
+  if(typeof p.title!=='string')p.title='Новый выпуск';
+  if(!PS.includes(p.status))p.status='идея';
+  if(!p.createdAt)p.createdAt=now();if(!p.updatedAt)p.updatedAt=p.createdAt;
+  const emptyConcept={goal:'',question:'',intrigue:'',path:'',keyEvents:'',successCriteria:'',conditions:'',problems:'',facts:''};
+  p.concept={...emptyConcept,...(p.concept&&typeof p.concept==='object'?p.concept:{})};
+  if(!p.scripts||typeof p.scripts!=='object'||Array.isArray(p.scripts))p.scripts={};
+  Object.entries(p.scripts).forEach(([key,s])=>{
+    if(!s||typeof s!=='object')s={};
+    s.id=s.id||key||uid();s.title=typeof s.title==='string'?s.title:'Сценарий';
+    s.tone=s.tone||'живой';s.createdAt=s.createdAt||now();
+    if(!Array.isArray(s.scenes))s.scenes=[];
+    s.scenes=s.scenes.filter(x=>x&&typeof x==='object').map(x=>({id:x.id||uid(),title:x.title||'Новая сцена',goal:'',duration:'',hostSays:'',hostAction:'',operator:'',general:'',medium:'',closeups:'',broll:'',reactions:'',transition:'',props:'',risks:'',sound:'',...x}));
+    p.scripts[key]=s;
+  });
+  if(!p.activeScriptId||!p.scripts[p.activeScriptId])p.activeScriptId=Object.keys(p.scripts)[0]||null;
+  for(const k of ['venues','facts','editNotes'])if(!Array.isArray(p[k]))p[k]=[];
+  if(!Array.isArray(p.shootChecklist))p.shootChecklist=chkTemplate('general');
+  p.shootChecklist=p.shootChecklist.filter(x=>x&&typeof x==='object').map(x=>({id:x.id||uid(),text:String(x.text||''),done:!!x.done}));
+  for(const k of ['shootDone','shootNotes','shootReshoot'])if(!p[k]||typeof p[k]!=='object'||Array.isArray(p[k]))p[k]={};
+  if(typeof p.shootGlobalNotes!=='string')p.shootGlobalNotes='';
+  p.publish={titles:[],description:'',coverText:'',pinnedComment:'',audienceQuestions:'',shortIdeas:'',chapters:'',...(p.publish&&typeof p.publish==='object'?p.publish:{})};
+  if(!Array.isArray(p.publish.titles))p.publish.titles=[];
+  return p;
+}
+function migrate(d){
+  if(!d||typeof d!=='object'||Array.isArray(d))throw new Error('Некорректная база данных');
+  if(Number(d.schemaVersion)>SV)throw new Error('Файл новее');
+  d.schemaVersion=SV;d.appVersion=d.appVersion||AV;
+  d.projects=Array.isArray(d.projects)?d.projects:[];d.projects=d.projects.map(migrateProject);
+  d.ideas=Array.isArray(d.ideas)?d.ideas.filter(i=>i&&typeof i==='object').map(i=>({...i,id:i.id||uid(),title:String(i.title||'Без названия'),concept:String(i.concept||''),status:i.status||'Новая',createdAt:i.createdAt||now()})):[];
+  d.prompts=d.prompts&&typeof d.prompts==='object'&&!Array.isArray(d.prompts)?d.prompts:{};
+  if(!d.projects.length)d.projects=[newProject('Мой первый выпуск')];
+  return d;
+}
+
+/* --- storage --- */
+const storage=(()=>{
+  let dbP=null,idbOk=null,lsOk=null;
+  function checkLS(){if(lsOk!==null)return lsOk;try{const k='__sht';localStorage.setItem(k,'1');localStorage.removeItem(k);lsOk=true}catch(_){lsOk=false}return lsOk}
+  function openDB(){
+    if(dbP)return dbP;
+    if(!('indexedDB'in window)){dbP=Promise.reject(new Error('no idb'));return dbP}
+    dbP=new Promise((res,rej)=>{
+      let s=false;const t=setTimeout(()=>{if(!s){s=true;rej(new Error('idb timeout'))}},3000);
+      try{const r=indexedDB.open(IDB,1);
+        r.onupgradeneeded=()=>{const db=r.result;if(!db.objectStoreNames.contains(ST))db.createObjectStore(ST)};
+        r.onsuccess=()=>{if(!s){s=true;clearTimeout(t);res(r.result)}};
+        r.onerror=()=>{if(!s){s=true;clearTimeout(t);rej(r.error)}};
+        r.onblocked=()=>{if(!s){s=true;clearTimeout(t);rej(new Error('idb blocked'))}};
+      }catch(e){if(!s){s=true;clearTimeout(t);rej(e)}}
+    });
+    return dbP;
+  }
+  async function get(){
+    try{const db=await openDB();
+      const r=await new Promise((res,rej)=>{const tx=db.transaction(ST,'readonly');const g=tx.objectStore(ST).get(KY);g.onsuccess=()=>res(g.result||null);g.onerror=()=>rej(g.error)});
+      idbOk=true;return r;
+    }catch(e){idbOk=false;console.warn('idb fail:',e.message)}
+    if(checkLS()){try{const raw=localStorage.getItem(LS);return raw?JSON.parse(raw):null}catch(e){console.warn('ls read:',e.message)}}
+    return null;
+  }
+  async function set(d){
+    if(idbOk!==false){
+      try{const db=await openDB();
+        await new Promise((res,rej)=>{const tx=db.transaction(ST,'readwrite');tx.objectStore(ST).put(d,KY);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)});
+        storageMode='idb';
+        if(checkLS()){try{localStorage.setItem(LS,JSON.stringify(d))}catch(_){}}
+        return 'idb';
+      }catch(e){idbOk=false;console.warn('idb write fail:',e.message)}
+    }
+    if(checkLS()){try{localStorage.setItem(LS,JSON.stringify(d));storageMode='ls';return 'ls'}catch(e){console.warn('ls write:',e.message)}}
+    storageMode='memory';return 'memory';
+  }
+  return{get,set,isPersistent:()=>storageMode==='idb'||storageMode==='ls',mode:()=>storageMode};
+})();
+
+async function persist(){
+  setSv('saving');state.updatedAt=now();
+  try{const m=await storage.set(state);
+    if(m==='memory'){setSv('error');if(!persistWarned){persistWarned=true;toast('Браузер не сохраняет. Делай экспорт!','err')}}
+    else setSv('saved');
+  }catch(e){console.error(e);setSv('error')}
+}
+async function loadState(){
+  let d=null;
+  try{d=await storage.get()}catch(e){console.error('read fail:',e)}
+  if(d&&d.schemaVersion&&Array.isArray(d.projects)&&d.projects.length){
+    try{state=migrate(d)}catch(e){console.error('migrate fail:',e);state=defaultState()}
+  }else state=defaultState();
+  try{await storage.set(state)}catch(_){}
+}
+
+/* --- accessors --- */
+function proj(id){const x=id||pid;let p=state.projects.find(q=>q.id===x);if(!p){p=state.projects[0];pid=p.id}return p}
+function activeScript(p){const a=Object.values(p.scripts||{});if(!a.length)return null;return p.scripts[p.activeScriptId]||a[0]}
+function findScene(p,sid){for(const s of Object.values(p.scripts||{})){const sc=(Array.isArray(s.scenes)?s.scenes:[]).find(x=>x.id===sid);if(sc)return sc}return null}
+
+/* --- navigation --- */
+const MORE=[{v:'projects',t:'🗂 Проекты'},{v:'generator',t:'🤖 Генератор'},{v:'concept',t:'🧭 Концепция'},{v:'rating',t:'⭐ Рейтинг'},{v:'facts',t:'🔍 Факты'},{v:'editnotes',t:'✂️ Монтаж'},{v:'publish',t:'📤 Публикация'},{v:'prompts',t:'📚 Промпты'},{v:'data',t:'📦 Данные'}];
+function setView(v){
+  if(v==='more'){openSheet();return}
+  view=v;
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  shootIdx=0;render();window.scrollTo(0,0);const m=$('main');if(m)m.scrollTop=0;
+}
+function openSheet(){$('sheet-grid').innerHTML=MORE.map(x=>`<button data-goto="${x.v}">${x.t}</button>`).join('');document.querySelectorAll('#sheet-grid [data-goto]').forEach(b=>b.onclick=()=>{closeSheet();setView(b.dataset.goto)});$('more-sheet').hidden=false}
+function closeSheet(){$('more-sheet').hidden=true}
+
+/* --- router --- */
+function render(){
+  const m=$('main');if(!m)return;
+  try{
+    const r={dashboard:[renderDashboard,afterDashboard],projects:[renderProjects,afterProjects],ideas:[renderIdeas,afterIdeas],generator:[renderGenerator,afterGenerator],concept:[renderConcept,afterConcept],script:[renderScript,afterScript],shoot:[renderShoot,afterShoot],rating:[renderRating,afterRating],facts:[renderFacts,afterFacts],editnotes:[renderEditNotes,afterEditNotes],publish:[renderPublish,afterPublish],prompts:[renderPrompts,afterPrompts],data:[renderData,afterData]}[view];
+    if(!r){m.innerHTML='<div class="empty">Раздел не найден</div>';return}
+    m.innerHTML=r[0]();r[1]();
+  }catch(e){console.error('render:',e);m.innerHTML='<div class="card"><h3>Ошибка</h3><pre>'+esc(e.message)+'</pre></div>'}
+}
+
+/* --- dashboard --- */
+function renderDashboard(){
+  const p=proj(),tc=p.shootChecklist.length,dc=p.shootChecklist.filter(x=>x.done).length,pct=tc?Math.round(dc/tc*100):0;
+  const as=activeScript(p),st=as?as.scenes.length:0,sd=as?as.scenes.filter(s=>p.shootDone[s.id]).length:0,sp=st?Math.round(sd/st*100):0;
+  const recent=[...state.projects].sort((a,b)=>(b.updatedAt||'').localeCompare(a.updatedAt||'')).slice(0,4);
+  return`<h1>Панель</h1>
+  <div class="card" style="margin-bottom:14px">
+    <div class="field" style="margin:0"><label>Активный проект</label>
+      <select id="proj-select">${state.projects.map(x=>`<option value="${esc(x.id)}" ${x.id===p.id?'selected':''}>${esc(x.title)} — ${esc(x.status)}</option>`).join('')}</select></div>
+    <div class="row" style="margin-top:10px"><button class="btn pri" id="btn-new-project">+ Новый</button><button class="btn" id="btn-export-project">⭳ Экспорт</button><button class="btn gho" id="btn-goto-data2">📦 Данные</button></div>
+  </div>
+  <div class="kpi">
+    <div class="kc"><div class="kl">Подготовка</div><div class="kv">${pct}%</div><div class="prg" style="margin-top:8px"><div style="width:${pct}%"></div></div></div>
+    <div class="kc"><div class="kl">Сцены сняты</div><div class="kv">${sd}/${st}</div><div class="prg" style="margin-top:8px"><div style="width:${sp}%"></div></div></div>
+    <div class="kc"><div class="kl">Идей</div><div class="kv">${state.ideas.length}</div></div>
+    <div class="kc"><div class="kl">Фактов открыто</div><div class="kv">${p.facts.filter(f=>f.status!=='Подтверждено'&&f.status!=='Не использовать').length}</div></div>
+  </div>
+  <div class="grid c2">
+    <div class="card"><h3>Быстрые действия</h3><div class="row" style="margin-top:6px"><button class="btn" data-quick="idea">💡 Идея</button><button class="btn" data-quick="script">🎬 Сценарий</button><button class="btn" data-quick="shoot">📹 Съёмка</button></div></div>
+    <div class="card"><h3>Задачи</h3>${upcoming(p)}</div>
+  </div>
+  <h2>Последние проекты</h2>
+  ${recent.map(x=>`<div class="li ck" data-open-project="${esc(x.id)}"><div><div style="font-weight:700">${esc(x.title)}</div><div class="mut" style="font-size:12px">${esc(x.status)} · ${esc(fmt(x.updatedAt))}</div></div><span class="bdg">${Object.values(x.scripts||{}).reduce((a,s)=>a+s.scenes.length,0)} сцен</span></div>`).join('')}`;
+}
+function upcoming(p){
+  const it=[];
+  if(!p.concept||!p.concept.goal)it.push('Заполнить концепцию');
+  if(!p.activeScriptId)it.push('Создать сценарий');
+  else{const sc=p.scripts[p.activeScriptId];if(sc){const u=sc.scenes.filter(s=>!p.shootDone[s.id]).length;if(u)it.push(`Доснять сцены (${u})`)}}
+  if(!p.facts.length)it.push('Добавить факты');
+  if(p.status!=='опубликован'&&!p.publish.description)it.push('Описание YouTube');
+  return it.length?'<ul style="margin:8px 0 0 18px">'+it.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>':'<p class="mut">Всё главное сделано.</p>';
+}
+function afterDashboard(){
+  $('proj-select').onchange=e=>{pid=e.target.value;render()};
+  $('btn-new-project').onclick=createProject;
+  $('btn-export-project').onclick=()=>exportProject(proj());
+  if($('btn-goto-data2'))$('btn-goto-data2').onclick=()=>setView('data');
+  document.querySelectorAll('[data-open-project]').forEach(el=>el.onclick=()=>{pid=el.dataset.openProject;setView('projects')});
+  document.querySelectorAll('[data-quick]').forEach(b=>b.onclick=()=>setView(b.dataset.quick));
+}
+
+/* --- projects --- */
+function renderProjects(){
+  return`<h1>Проекты</h1>
+  <div class="row" style="margin-bottom:14px"><button class="btn pri" id="btn-new-project-2">+ Новый</button><input id="proj-search" placeholder="Поиск" style="max-width:320px;flex:1;min-width:140px"></div>
+  <div id="proj-list" class="list"></div>`;
+}
+function afterProjects(){
+  $('btn-new-project-2').onclick=createProject;
+  const s=$('proj-search'),l=$('proj-list');
+  function draw(){
+    const q=(s.value||'').toLowerCase();
+    const items=state.projects.filter(p=>!q||p.title.toLowerCase().includes(q)||p.status.includes(q));
+    if(!items.length){l.innerHTML='<div class="empty">Ничего не найдено</div>';return}
+    l.innerHTML=items.map(p=>{
+      const t=p.shootChecklist.length,d=p.shootChecklist.filter(x=>x.done).length;
+      return`<div class="card" style="margin-bottom:10px">
+        <div style="font-weight:700;font-size:16px">${esc(p.title)}</div>
+        <div class="mut" style="font-size:12px;margin-top:2px">обновлён ${esc(fmt(p.updatedAt))} · сцен: ${Object.values(p.scripts||{}).reduce((a,s)=>a+s.scenes.length,0)}</div>
+        <div class="row" style="margin-top:8px"><span class="bdg ac">${esc(p.status)}</span><span class="bdg">чек-лист ${d}/${t}</span><span class="bdg">фактов: ${p.facts.length}</span></div>
+        <div class="row" style="margin-top:10px"><button class="btn sm" data-act="open" data-id="${esc(p.id)}">Открыть</button><button class="btn sm" data-act="export" data-id="${esc(p.id)}">⭳ JSON</button><button class="btn sm" data-act="dup" data-id="${esc(p.id)}">Дублировать</button><button class="btn sm dng" data-act="del" data-id="${esc(p.id)}">Удалить</button></div>
+        <div class="field" style="margin:10px 0 0 0"><label>Статус</label><select data-act="status" data-id="${esc(p.id)}">${PS.map(s=>`<option ${s===p.status?'selected':''}>${esc(s)}</option>`).join('')}</select></div>
+      </div>`;
+    }).join('');
+    l.querySelectorAll('[data-act]').forEach(el=>{
+      const id=el.dataset.id,a=el.dataset.act;
+      if(a==='open')el.onclick=()=>{pid=id;setView('dashboard')};
+      if(a==='export')el.onclick=()=>exportProject(state.projects.find(x=>x.id===id));
+      if(a==='dup')el.onclick=()=>dupProject(id);
+      if(a==='del')el.onclick=()=>delProject(id);
+      if(a==='status')el.onchange=e=>setProjectStatus(id,e.target.value);
+    });
+  }
+  s.oninput=draw;draw();
+}
+function createProject(){
+  const n=prompt('Название:','Новый выпуск');if(n==null)return;
+  const p=newProject(n.trim()||'Новый выпуск');state.projects.push(p);pid=p.id;persist();render();toast('Создан','ok');
+}
+function dupProject(id){
+  const s=state.projects.find(p=>p.id===id);if(!s)return;
+  const c=JSON.parse(JSON.stringify(s));c.id=uid();c.title=s.title+' (копия)';c.createdAt=now();c.updatedAt=now();
+  state.projects.push(c);persist();render();toast('Дублировано','ok');
+}
+function delProject(id){
+  if(state.projects.length<=1){toast('Нельзя удалить последний','err');return}
+  if(!confirm('Удалить?'))return;
+  state.projects=state.projects.filter(p=>p.id!==id);
+  if(pid===id)pid=state.projects[0].id;
+  persist();render();toast('Удалён','ok');
+}
+function setProjectStatus(id,st){const p=state.projects.find(x=>x.id===id);if(p){p.status=st;touch(p);persist();render()}}
+
+/* --- ideas --- */
+function renderIdeas(){
+  const f=ideaFilter;
+  const ideas=state.ideas.filter(i=>{
+    if(f.format&&i.format!==f.format)return false;
+    if(f.status&&i.status!==f.status)return false;
+    if(f.q&&!(String(i.title||'').toLowerCase().includes(f.q.toLowerCase())||(i.concept||'').toLowerCase().includes(f.q.toLowerCase())))return false;
+    return true;
+  });
+  return`<h1>Банк идей</h1>
+  <div class="row" style="margin-bottom:12px"><button class="btn pri" id="btn-add-idea">+ Идея</button><button class="btn" id="btn-idea-gen">🤖 DeepSeek</button></div>
+  <div class="grid c3" style="margin-bottom:12px">
+    <div class="field"><label>Формат</label><select id="f-format"><option value="">Все</option>${IF.map(x=>`<option ${x===f.format?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+    <div class="field"><label>Статус</label><select id="f-status"><option value="">Все</option>${IS.map(x=>`<option ${x===f.status?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+    <div class="field"><label>Поиск</label><input id="f-q" value="${esc(f.q)}"></div>
+  </div>
+  ${ideas.length?`<div class="list">${ideas.map(ideaCard).join('')}</div>`:'<div class="empty">Идей нет.</div>'}`;
+}
+function ideaCard(i){
+  return`<div class="card">
+    <div class="row" style="margin-bottom:6px"><span class="bdg ac">${esc(i.format||'—')}</span><span class="bdg">${esc(i.status)}</span><span class="mut" style="font-size:12px">${esc(fmt(i.createdAt))}</span></div>
+    <div style="font-weight:700;font-size:15px">${esc(i.title)}</div>
+    <div class="mut" style="font-size:13px;margin-top:4px">${n2b(i.concept||'')}</div>
+    ${i.hook?`<div style="margin-top:8px;font-size:13px"><b>Хук:</b> ${esc(i.hook)}</div>`:''}
+    <div class="row" style="margin-top:10px"><button class="btn sm" data-idea-edit="${esc(i.id)}">✎</button><button class="btn sm" data-idea-dup="${esc(i.id)}">⧉</button><button class="btn sm pri" data-idea-script="${esc(i.id)}">→ Сценарий</button><button class="btn sm dng" data-idea-del="${esc(i.id)}">✕</button></div>
+  </div>`;
+}
+function afterIdeas(){
+  $('btn-add-idea').onclick=()=>ideaForm(null);
+  $('btn-idea-gen').onclick=()=>setView('generator');
+  $('f-format').onchange=e=>{ideaFilter.format=e.target.value;render()};
+  $('f-status').onchange=e=>{ideaFilter.status=e.target.value;render()};
+  $('f-q').oninput=e=>{ideaFilter.q=e.target.value;render()};
+  document.querySelectorAll('[data-idea-edit]').forEach(b=>b.onclick=()=>ideaForm(b.dataset.ideaEdit));
+  document.querySelectorAll('[data-idea-dup]').forEach(b=>b.onclick=()=>ideaDup(b.dataset.ideaDup));
+  document.querySelectorAll('[data-idea-del]').forEach(b=>b.onclick=()=>ideaDel(b.dataset.ideaDel));
+  document.querySelectorAll('[data-idea-script]').forEach(b=>b.onclick=()=>ideaToScript(b.dataset.ideaScript));
+}
+function ideaDup(id){const s=state.ideas.find(i=>i.id===id);if(!s)return;const c=JSON.parse(JSON.stringify(s));c.id=uid();c.title=s.title+' (копия)';c.createdAt=now();state.ideas.push(c);persist();render()}
+function ideaDel(id){if(!confirm('Удалить?'))return;state.ideas=state.ideas.filter(i=>i.id!==id);persist();render()}
+function ideaForm(id){
+  const ed=!!id,i=ed?state.ideas.find(x=>x.id===id):{id:uid(),title:'',concept:'',format:'',audience:'',hook:'',intrigue:'',challenges:'',shots:'',duration:'',budget:'',materials:'',risks:'',factsToCheck:'',status:'Новая',createdAt:now(),notes:''};
+  if(!i)return;
+  modal(ed?'Редактировать':'Новая идея',`
+    <div class="field"><label>Название</label><input id="if-title" value="${esc(i.title)}"></div>
+    <div class="field"><label>Концепция</label><textarea id="if-concept">${esc(i.concept)}</textarea></div>
+    <div class="grid c2">
+      <div class="field"><label>Формат</label><select id="if-format"><option value="" ${!i.format?'selected':''}>Не выбран</option>${IF.map(x=>`<option ${x===i.format?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+      <div class="field"><label>Статус</label><select id="if-status">${IS.map(x=>`<option ${x===i.status?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+      <div class="field"><label>Аудитория</label><input id="if-audience" value="${esc(i.audience)}"></div>
+      <div class="field"><label>Длительность</label><input id="if-duration" value="${esc(i.duration)}"></div>
+      <div class="field"><label>Затраты</label><input id="if-budget" value="${esc(i.budget)}"></div>
+      <div class="field"><label>Хук</label><input id="if-hook" value="${esc(i.hook)}"></div>
+      <div class="field" style="grid-column:1/-1"><label>Интрига</label><input id="if-intrigue" value="${esc(i.intrigue)}"></div>
+      <div class="field" style="grid-column:1/-1"><label>Испытания</label><textarea id="if-challenges">${esc(i.challenges)}</textarea></div>
+      <div class="field" style="grid-column:1/-1"><label>Кадры</label><textarea id="if-shots">${esc(i.shots)}</textarea></div>
+      <div class="field" style="grid-column:1/-1"><label>Материалы</label><textarea id="if-materials">${esc(i.materials)}</textarea></div>
+      <div class="field" style="grid-column:1/-1"><label>Риски</label><textarea id="if-risks">${esc(i.risks)}</textarea></div>
+      <div class="field" style="grid-column:1/-1"><label>Что проверить</label><textarea id="if-facts">${esc(i.factsToCheck)}</textarea></div>
+      <div class="field" style="grid-column:1/-1"><label>Заметки</label><textarea id="if-notes">${esc(i.notes)}</textarea></div>
+    </div>
+    <div class="row" style="margin-top:12px"><button class="btn pri" id="if-save">Сохранить</button><button class="btn gho" id="if-cancel">Отмена</button></div>`);
+  $('if-cancel').onclick=closeModal;
+  $('if-save').onclick=()=>{
+    const g=k=>$(k).value;
+    const o={id:i.id,title:g('if-title').trim()||'Без названия',concept:g('if-concept'),format:g('if-format'),audience:g('if-audience'),hook:g('if-hook'),intrigue:g('if-intrigue'),challenges:g('if-challenges'),shots:g('if-shots'),duration:g('if-duration'),budget:g('if-budget'),materials:g('if-materials'),risks:g('if-risks'),factsToCheck:g('if-facts'),status:g('if-status'),notes:g('if-notes'),createdAt:i.createdAt||now()};
+    if(ed){const idx=state.ideas.findIndex(x=>x.id===i.id);state.ideas[idx]=o}else state.ideas.push(o);
+    persist();closeModal();render();toast('Сохранено','ok');
+  };
+}
+function ideaToScript(id){
+  const idea=state.ideas.find(i=>i.id===id);if(!idea)return;
+  const p=proj();
+  if(p.activeScriptId&&p.scripts[p.activeScriptId]&&!confirm('Сценарий уже есть. Создать ещё один?'))return;
+  const s={id:uid(),title:idea.title,tone:'живой',createdAt:now(),scenes:scenesFromIdea(idea)};
+  p.scripts[s.id]=s;p.activeScriptId=s.id;p.ideaId=id;
+  if(p.title==='Мой первый выпуск'||p.title==='Новый выпуск')p.title=idea.title;
+  touch(p);persist();setView('script');toast('Сценарий создан','ok');
+}
+function scenesFromIdea(idea){
+  const T=(title,goal,dur,ha,hs,op,sh)=>({id:uid(),title,goal,duration:dur,hostAction:ha,hostSays:hs,operator:op,general:sh?.[0]||'',medium:sh?.[1]||'',closeups:sh?.[2]||'',broll:'',reactions:'',transition:'',props:'',risks:'',sound:''});
+  return[
+    T('Хук','Зацепить','5–15 сек','Резкая реакция','Смотри, куда мы пришли!','Крупный план',['Общий','Вход','Крупный']),
+    T('Вступление','Тема','15–30 сек','Объясняет',`Сегодня ${idea.concept||'пробуем'}.`,'Средний + перебивки',['Средний','Перебивки','Детали']),
+    T('Место','Локация','20–40 сек','Ходит, комментирует','Смотрите, что тут.','Проходка',['Проходка','Крупные','Общий']),
+    T('Проба','Первая попытка','30–60 сек','Пробует','Поехали.','С разных точек',['Начало','Реакция','Детали']),
+    T('Основная','Испытания','2–5 мин','Проходит','Ощущения...','Разные планы',['Ракурсы','Крупные','Перебивки']),
+    T('Реакции','Живые моменты','15–30 сек','Реагирует','(импров)','Ловить',['Крупный','Случайные']),
+    T('Плюсы/минусы','Сравнение','30–60 сек','Перечисляет','Плюсы: ... Минусы: ...','Голова + перебивки',['Голова','Перебивки']),
+    T('Оценка','Итог','20–40 сек','Объявляет','Оценка — X из 10.','Крупный',['Крупный','Фон']),
+    T('Финал','Завершение','15–30 сек','Итог','Пишите в комментариях!','Средний',['Средний','Заключительный'])
+  ];
+}
+
+/* --- generator --- */
+function renderGenerator(){
+  return`<h1>Генератор идей</h1>
+  <p class="mut" style="margin-top:0;font-size:13px">Sport Hub формирует промпт → копируешь в DeepSeek → вставляешь ответ.</p>
+  <div class="card" style="margin-bottom:14px">
+    <div class="grid c2">
+      <div class="field"><label>Формат</label><select id="g-format">${IF.map(f=>`<option>${esc(f)}</option>`).join('')}</select></div>
+      <div class="field"><label>Тема</label><input id="g-topic"></div>
+      <div class="field"><label>Город</label><input id="g-city"></div>
+      <div class="field"><label>Длительность</label><input id="g-duration"></div>
+      <div class="field"><label>Бюджет</label><input id="g-budget"></div>
+      <div class="field"><label>Ограничения</label><input id="g-limits"></div>
+      <div class="field"><label>Настроение</label><input id="g-mood"></div>
+      <div class="field"><label>Сложность</label><select id="g-diff"><option>лёгкая</option><option>средняя</option><option>высокая</option></select></div>
+      <div class="field" style="grid-column:1/-1"><label>Пожелания</label><textarea id="g-extra"></textarea></div>
+    </div>
+    <button class="btn pri" id="g-make">Сформировать промпт</button>
+  </div>
+  <div id="g-prompt-wrap"></div>
+  <div id="g-answer-wrap" style="margin-top:20px"></div>`;
+}
+function afterGenerator(){
+  $('g-make').onclick=()=>{
+    const v=id=>$(id).value.trim();
+    const prompt=ideaPrompt({format:v('g-format'),topic:v('g-topic'),city:v('g-city'),duration:v('g-duration'),budget:v('g-budget'),limits:v('g-limits'),mood:v('g-mood'),diff:v('g-diff'),extra:v('g-extra')});
+    $('g-prompt-wrap').innerHTML=`<div class="card"><h3>Промпт</h3><pre class="prompt">${esc(prompt)}</pre><div class="row" style="margin-top:10px"><button class="btn pri" id="g-copy">📋 Скопировать</button><button class="btn" id="g-open">Открыть DeepSeek ↗</button></div></div>`;
+    $('g-copy').onclick=async()=>{const ok=await copyText(prompt);toast(ok?'Скопировано':'Не удалось',ok?'ok':'err')};
+    $('g-open').onclick=()=>window.open('https://chat.deepseek.com/','_blank');
+    renderAnswer();
+  };
+  renderAnswer();
+  function renderAnswer(){
+    $('g-answer-wrap').innerHTML=`<div class="card"><h3>Ответ DeepSeek</h3><textarea id="g-answer" placeholder="Вставь ответ..." style="min-height:160px"></textarea><div class="row" style="margin-top:10px"><button class="btn pri" id="g-save-ideas">Разобрать в идеи</button><button class="btn" id="g-save-raw">Одной идеей</button></div></div>`;
+    $('g-save-ideas').onclick=()=>saveDeepSeek(false);
+    $('g-save-raw').onclick=()=>saveDeepSeek(true);
+  }
+}
+function ideaPrompt(i){
+  return`Ты — сценарист YouTube-канала «РАЗГИЛЬДЯИ» (слоган: «Спорт без лишнего пафоса!»).
+Канал пробует виды спорта, тестирует площадки, честно оценивает. Стиль: живой, дружеский, без пафоса, с самоиронией. В кадре двое: ведущий и оператор.
+
+ЗАДАЧА: предложи ТРИ РАЗНЫЕ идеи.
+Для каждой:
+1) Название
+2) Суть
+3) Хук 5–15 сек
+4) Почему интересно
+5) Что в кадре
+6) Задачи ведущего
+7) Задачи оператора
+8) Оборудование
+9) Структура
+10) Трудности
+11) Что проверить
+12) Вердикт
+13) Shorts
+
+ОФОРМЛЕНИЕ: каждую идею начинай строкой «Идея N: Название», маркеры «1)», «2)»... без вводных.
+
+ВХОД:
+- Формат: ${i.format||'—'}
+- Тема: ${i.topic||'—'}
+- Город: ${i.city||'—'}
+- Длительность: ${i.duration||'—'}
+- Бюджет: ${i.budget||'—'}
+- Ограничения: ${i.limits||'—'}
+- Настроение: ${i.mood||'живое с юмором'}
+- Сложность: ${i.diff||'средняя'}
+- Пожелания: ${i.extra||'—'}
+
+Не выдумывай адреса, цены, статистику.`;
+}
+function saveDeepSeek(raw){
+  const txt=$('g-answer').value.trim();if(!txt){toast('Пустой ответ','err');return}
+  let blocks=[];
+  if(!raw){
+    const re=/(^|\n)\s*Идея\s+\d+\s*[:\-—]/gi;const idx=[];let m;
+    while((m=re.exec(txt))!==null)idx.push(m.index+(m[1]?m[1].length:0));
+    if(idx.length){for(let k=0;k<idx.length;k++){const a=idx[k];const b=k+1<idx.length?idx[k+1]:txt.length;blocks.push(txt.slice(a,b).trim())}}
+    else blocks=[txt];
+  }else blocks=[txt];
+  let c=0;
+  blocks.forEach((b,i)=>{
+    const pr=parseIdea(b,i+1);
+    state.ideas.push({id:uid(),title:pr.title,concept:pr.short,format:$('g-format').value,audience:'',hook:pr.hook,intrigue:pr.why,challenges:pr.whatInFrame,shots:pr.operator,duration:$('g-duration').value,budget:$('g-budget').value,materials:pr.equipment,risks:pr.risks,factsToCheck:pr.toCheck,status:'Новая',createdAt:now(),notes:b});
+    c++;
+  });
+  persist();toast(`Сохранено: ${c}`,'ok');$('g-answer').value='';setView('ideas');
+}
+function parseIdea(b,n){
+  const o={};const tm=b.match(/Идея\s*\d+\s*[:\-—]\s*(.+)/i);
+  o.title=tm?tm[1].trim().split('\n')[0]:`Идея ${n}`;
+  const g=k=>{const re=new RegExp(k+'\\)\\s*([\\s\\S]*?)(?=\\n\\s*\\d+\\)|$)','i');const m=b.match(re);return m?m[1].trim():''};
+  o.short=g(2)||g(1);o.hook=g(3);o.why=g(4);o.whatInFrame=g(5);o.operator=g(7);o.equipment=g(8);o.risks=g(10);o.toCheck=g(11);
+  return o;
+}
+
+/* --- concept --- */
+function renderConcept(){
+  const c=proj().concept||{};
+  return`<h1>Концепция</h1>
+  <div class="grid c2">
+    <div class="field" style="grid-column:1/-1"><label>Цель</label><textarea id="c-goal">${esc(c.goal||'')}</textarea></div>
+    <div class="field" style="grid-column:1/-1"><label>Вопрос</label><input id="c-question" value="${esc(c.question||'')}"></div>
+    <div class="field" style="grid-column:1/-1"><label>Интрига</label><input id="c-intrigue" value="${esc(c.intrigue||'')}"></div>
+    <div class="field" style="grid-column:1/-1"><label>Путь зрителя</label><textarea id="c-path">${esc(c.path||'')}</textarea></div>
+    <div class="field" style="grid-column:1/-1"><label>События</label><textarea id="c-events">${esc(c.keyEvents||'')}</textarea></div>
+    <div class="field"><label>Критерии успеха</label><textarea id="c-success">${esc(c.successCriteria||'')}</textarea></div>
+    <div class="field"><label>Условия</label><textarea id="c-cond">${esc(c.conditions||'')}</textarea></div>
+    <div class="field" style="grid-column:1/-1"><label>Проблемы</label><textarea id="c-problems">${esc(c.problems||'')}</textarea></div>
+    <div class="field" style="grid-column:1/-1"><label>Что проверить</label><textarea id="c-facts">${esc(c.facts||'')}</textarea></div>
+  </div>
+  <div class="row" style="margin-top:12px"><button class="btn pri" id="c-save">Сохранить</button><button class="btn" id="c-to-script">→ Сценарий</button></div>`;
+}
+function afterConcept(){
+  $('c-save').onclick=()=>{
+    const p=proj(),g=id=>$(id).value;
+    p.concept={goal:g('c-goal'),question:g('c-question'),intrigue:g('c-intrigue'),path:g('c-path'),keyEvents:g('c-events'),successCriteria:g('c-success'),conditions:g('c-cond'),problems:g('c-problems'),facts:g('c-facts')};
+    touch(p);persist();toast('Сохранено','ok');
+  };
+  $('c-to-script').onclick=()=>{
+    const p=proj();
+    if(p.activeScriptId&&p.scripts[p.activeScriptId]&&!confirm('Сценарий уже есть. Создать ещё один?'))return;
+    const s={id:uid(),title:p.title+' — черновик',tone:'живой',createdAt:now(),scenes:scenesFromIdea({hook:p.concept.question||'',concept:p.concept.goal||''})};
+    p.scripts[s.id]=s;p.activeScriptId=s.id;touch(p);persist();setView('script');
+  };
+}
+
+/* --- script --- */
+function renderScript(){
+  const p=proj(),sc=Object.values(p.scripts||{}),a=activeScript(p);
+  if(!a)return`<h1>Сценарий</h1><div class="empty">Сценариев нет.<div class="row" style="justify-content:center;margin-top:14px"><button class="btn pri" id="go-ideas">Из идей</button><button class="btn" id="go-concept">Из концепции</button></div></div>`;
+  return`<h1>Сценарий</h1>
+  <div class="row" style="margin-bottom:10px"><select id="s-select" style="flex:1;min-width:140px">${sc.map(s=>`<option value="${esc(s.id)}" ${s.id===a.id?'selected':''}>${esc(s.title)}</option>`).join('')}</select><button class="btn" id="s-tone">Тон: ${esc(a.tone||'живой')}</button></div>
+  <div class="row" style="margin-bottom:12px"><button class="btn pri" id="s-add">+ Сцена</button><button class="btn" id="s-to-shoot">→ Съёмка</button><button class="btn dng" id="s-del">Удалить</button></div>
+  <div id="s-scenes">${a.scenes.map((x,i)=>sceneEditor(x,i)).join('')}</div>
+  <button class="btn pri" id="s-add-b" style="margin-top:8px">+ Сцена</button>`;
+}
+function sceneEditor(sc,idx){
+  return`<div class="scene" data-scene-id="${esc(sc.id)}">
+    <div class="sh"><span class="sn">${idx+1}</span><span class="st">${esc(sc.title)}</span><span class="mut" style="font-size:12px">${esc(sc.duration||'')}</span><button class="btn sm gho" data-act="toggle">▾</button><button class="btn sm gho" data-act="del">✕</button></div>
+    <div class="sb">
+      <div class="grid c2">
+        <div class="field"><label>Название</label><input data-f="title" value="${esc(sc.title)}"></div>
+        <div class="field"><label>Длительность</label><input data-f="duration" value="${esc(sc.duration||'')}"></div>
+        <div class="field" style="grid-column:1/-1"><label>Цель</label><input data-f="goal" value="${esc(sc.goal||'')}"></div>
+        <div class="field" style="grid-column:1/-1"><label>Ведущему</label><textarea data-f="hostSays">${esc(sc.hostSays||'')}</textarea></div>
+        <div class="field" style="grid-column:1/-1"><label>Действия</label><textarea data-f="hostAction">${esc(sc.hostAction||'')}</textarea></div>
+        <div class="field" style="grid-column:1/-1"><label>Оператору</label><textarea data-f="operator">${esc(sc.operator||'')}</textarea></div>
+        <div class="field"><label>Общий</label><input data-f="general" value="${esc(sc.general||'')}"></div>
+        <div class="field"><label>Средний</label><input data-f="medium" value="${esc(sc.medium||'')}"></div>
+        <div class="field"><label>Крупные</label><input data-f="closeups" value="${esc(sc.closeups||'')}"></div>
+        <div class="field"><label>Перебивки</label><input data-f="broll" value="${esc(sc.broll||'')}"></div>
+        <div class="field"><label>Реакции</label><input data-f="reactions" value="${esc(sc.reactions||'')}"></div>
+        <div class="field"><label>Переход</label><input data-f="transition" value="${esc(sc.transition||'')}"></div>
+        <div class="field"><label>Реквизит</label><input data-f="props" value="${esc(sc.props||'')}"></div>
+        <div class="field"><label>Риски</label><input data-f="risks" value="${esc(sc.risks||'')}"></div>
+        <div class="field"><label>Звук</label><input data-f="sound" value="${esc(sc.sound||'')}"></div>
+      </div>
+      <div class="row" style="margin-top:8px"><button class="btn sm pri" data-act="save">Сохранить</button><button class="btn sm" data-act="up">↑</button><button class="btn sm" data-act="down">↓</button></div>
+    </div>
+  </div>`;
+}
+function afterScript(){
+  const p=proj(),a=activeScript(p);
+  const sel=$('s-select');
+  if(sel)sel.onchange=e=>{p.activeScriptId=e.target.value;touch(p);persist();render()};
+  const tn=$('s-tone');
+  if(tn)tn.onclick=()=>{
+    const T=['живой','больше юмора','больше испытаний','больше обзора','более динамичный','личный опыт'];
+    const s=p.scripts[p.activeScriptId];const i=T.indexOf(s.tone||'живой');s.tone=T[(i+1)%T.length];touch(p);persist();render();
+  };
+  const add=()=>{const s=p.scripts[p.activeScriptId];s.scenes.push({id:uid(),title:'Новая сцена',goal:'',duration:'',hostSays:'',hostAction:'',operator:'',general:'',medium:'',closeups:'',broll:'',reactions:'',transition:'',props:'',risks:'',sound:''});touch(p);persist();render()};
+  if($('s-add'))$('s-add').onclick=add;
+  if($('s-add-b'))$('s-add-b').onclick=add;
+  if($('s-to-shoot'))$('s-to-shoot').onclick=()=>setView('shoot');
+  if($('s-del'))$('s-del').onclick=()=>{
+    if(!confirm('Удалить сценарий?'))return;
+    delete p.scripts[p.activeScriptId];p.activeScriptId=Object.keys(p.scripts)[0]||null;touch(p);persist();render();
+  };
+  if(!a){
+    if($('go-ideas'))$('go-ideas').onclick=()=>setView('ideas');
+    if($('go-concept'))$('go-concept').onclick=()=>setView('concept');
+    return;
+  }
+  document.querySelectorAll('.scene').forEach(el=>{
+    const sid=el.dataset.sceneId;
+    el.querySelector('.sh').onclick=e=>{if(e.target.closest('[data-act]'))return;el.classList.toggle('open')};
+    el.querySelector('[data-act="toggle"]').onclick=()=>el.classList.toggle('open');
+    el.querySelector('[data-act="del"]').onclick=()=>{
+      if(!confirm('Удалить сцену?'))return;
+      const s=p.scripts[p.activeScriptId];s.scenes=s.scenes.filter(x=>x.id!==sid);touch(p);persist();render();
+    };
+    el.querySelector('[data-act="save"]').onclick=()=>{
+      const sc=p.scripts[p.activeScriptId].scenes.find(x=>x.id===sid);
+      el.querySelectorAll('[data-f]').forEach(inp=>{sc[inp.dataset.f]=inp.value});
+      touch(p);persist();toast('Сохранено','ok');
+    };
+    el.querySelector('[data-act="up"]').onclick=()=>moveScene(sid,-1);
+    el.querySelector('[data-act="down"]').onclick=()=>moveScene(sid,1);
+  });
+}
+function moveScene(sid,d){
+  const p=proj(),s=p.scripts[p.activeScriptId],i=s.scenes.findIndex(x=>x.id===sid),j=i+d;
+  if(j<0||j>=s.scenes.length)return;
+  [s.scenes[i],s.scenes[j]]=[s.scenes[j],s.scenes[i]];touch(p);persist();render();
+}
+
+/* --- shoot --- */
+function renderShoot(){
+  const p=proj(),s=activeScript(p);
+  if(!s)return`<h1>Съёмка</h1><div class="empty">Нет сценария.</div>`;
+  if(!s.scenes.length)return`<h1>Съёмка</h1><div class="empty">В сценарии нет сцен.</div>`;
+  const tc=p.shootChecklist.length,dc=p.shootChecklist.filter(x=>x.done).length;
+  if(shootIdx>=s.scenes.length)shootIdx=0;
+  const sc=s.scenes[shootIdx],done=!!p.shootDone[sc.id],rs=!!p.shootReshoot[sc.id];
+  return`<h1>Съёмка</h1>
+  <div class="row" style="margin-bottom:10px;font-size:13px"><span class="bdg">${esc(s.title)}</span><span class="bdg ok">${dc}/${tc}</span></div>
+  <div class="snv"><button class="btn" id="sh-prev" ${shootIdx===0?'disabled':''}>← Пред</button><button class="btn pri" id="sh-next" ${shootIdx===s.scenes.length-1?'disabled':''}>След →</button></div>
+  <div class="sc2">
+    <div class="shd"><div><div class="snm">Сцена ${shootIdx+1} / ${s.scenes.length}</div><div class="sti">${esc(sc.title)}</div></div>${done?'<span class="bdg ok">снято</span>':''}${rs?'<span class="bdg bd">переснять</span>':''}</div>
+    <div class="sb2"><label>Цель</label><div class="sv2">${esc(sc.goal||'—')}</div></div>
+    <div class="sb2"><label>Длительность</label><div class="sv2">${esc(sc.duration||'—')}</div></div>
+    <div class="sb2"><label>Ведущему</label><div class="sv2">${n2b(sc.hostSays||'—')}<div class="mut" style="font-size:13px">${esc(sc.hostAction||'')}</div></div></div>
+    <div class="sb2"><label>Оператору</label><div class="sv2">${n2b(sc.operator||'—')}</div></div>
+    <div class="sb2"><label>Кадры</label><div class="sv2 sm">${esc(sc.general||'—')}<br>${esc(sc.medium||'—')}<br>${esc(sc.closeups||'—')}</div></div>
+    <div class="sb2"><label>Перебивки</label><div class="sv2 sm">${esc(sc.broll||'—')}</div></div>
+    <div class="sb2"><label>Звук / риски</label><div class="sv2 sm">${esc(sc.sound||'—')} · ${esc(sc.risks||'—')}</div></div>
+    <div class="sac"><button class="btn ${done?'pri':''}" id="sh-done">${done?'✓ Снято':'Снято'}</button><button class="btn ${rs?'dng':''}" id="sh-reshoot">${rs?'✕ Переснять':'Переснять'}</button></div>
+    <div class="sb2" style="margin-top:14px"><label>Заметка</label><textarea class="snt" id="sh-note" placeholder="Таймкод, дубль...">${esc(p.shootNotes[sc.id]||'')}</textarea><div class="mut" style="font-size:11px;margin-top:4px">Сохраняется автоматически</div></div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="crow"><div><b>Чек-лист</b><div class="mut" style="font-size:12px">${dc}/${tc}</div></div><button class="btn sm" id="chk-reset">Шаблон</button></div>
+    <div style="margin-top:10px">${p.shootChecklist.map(x=>`<label class="chk"><input type="checkbox" data-chk="${esc(x.id)}" ${x.done?'checked':''}><span class="${x.done?'done':''}">${esc(x.text)}</span></label>`).join('')}</div>
+  </div>
+  <div class="card"><h3>Общие заметки</h3><textarea id="shoot-global-notes" style="min-height:80px">${esc(p.shootGlobalNotes||'')}</textarea><button class="btn pri" id="shoot-global-save" style="margin-top:8px">Сохранить</button></div>`;
+}
+function afterShoot(){
+  const p=proj(),s=activeScript(p);if(!s||!s.scenes.length)return;
+  const sc=s.scenes[shootIdx];
+  if($('sh-prev'))$('sh-prev').onclick=()=>{shootIdx=Math.max(0,shootIdx-1);render()};
+  if($('sh-next'))$('sh-next').onclick=()=>{shootIdx=Math.min(s.scenes.length-1,shootIdx+1);render()};
+  if($('sh-done'))$('sh-done').onclick=()=>{if(p.shootDone[sc.id])delete p.shootDone[sc.id];else p.shootDone[sc.id]=true;touch(p);persist();render()};
+  if($('sh-reshoot'))$('sh-reshoot').onclick=()=>{if(p.shootReshoot[sc.id])delete p.shootReshoot[sc.id];else p.shootReshoot[sc.id]=true;touch(p);persist();render()};
+  if($('sh-note')){
+    let t=null;$('sh-note').oninput=()=>{clearTimeout(t);setSv('saving');t=setTimeout(()=>{p.shootNotes[sc.id]=$('sh-note').value;touch(p);persist()},500)};
+  }
+  document.querySelectorAll('[data-chk]').forEach(cb=>cb.onchange=()=>{
+    const it=p.shootChecklist.find(x=>x.id===cb.dataset.chk);
+    if(it){it.done=cb.checked;touch(p);persist();render()}
+  });
+  if($('chk-reset'))$('chk-reset').onclick=()=>{
+    const k=confirm('Шаблон «Спорт»? Отмена — «Площадка».')?'sport':'venue';
+    if(!confirm('Сбросить чек-лист?'))return;
+    p.shootChecklist=chkTemplate(k);touch(p);persist();render();
+  };
+  if($('shoot-global-save'))$('shoot-global-save').onclick=()=>{p.shootGlobalNotes=$('shoot-global-notes').value;touch(p);persist();toast('Сохранено','ok')};
+}
+
+/* --- rating --- */
+function calcVenue(v){
+  const c=v.criteria||DC,s=v.scores||{};let sum=0,w=0;
+  c.forEach(x=>{sum+=(+s[x.id]||0)*(+x.weight||1);w+=+x.weight||1});
+  const t=w?sum/w:0;
+  const eq=c.every(x=>(+x.weight||1)===(+c[0].weight||1));
+  return{total:Math.round(t*100)/100,formula:eq?`Равные веса: (${c.map(x=>s[x.id]||0).join(' + ')}) / ${c.length}`:'Взвешенное среднее: Σ(оценка × вес) / Σвесов'};
+}
+function renderRating(){
+  const p=proj();
+  if(!p.venues.length)return`<h1>Рейтинг</h1><div class="empty">Площадок нет.<div style="margin-top:14px"><button class="btn pri" id="v-new">+ Добавить</button></div></div>`;
+  return`<h1>Рейтинг</h1><button class="btn pri" id="v-new" style="margin-bottom:14px">+ Добавить</button><div class="list">${p.venues.map(v=>{const c=calcVenue(v);return`<div class="card"><div class="crow"><div><div style="font-weight:700;font-size:16px">${esc(v.name)}</div><div class="mut" style="font-size:12px">${esc(v.sport||'—')} · ${esc(v.date||'')} ${v.cost?' · '+esc(v.cost):''}</div></div><div style="text-align:right"><div style="font-size:22px;font-weight:800">${c.total}</div><div class="mut" style="font-size:11px">из 10</div></div></div><div class="mut" style="font-size:12px;margin-top:4px">${esc(c.formula)}</div><div class="row" style="margin-top:10px"><button class="btn sm" data-v-edit="${esc(v.id)}">✎</button><button class="btn sm dng" data-v-del="${esc(v.id)}">✕</button></div></div>`}).join('')}</div>`;
+}
+function afterRating(){
+  const p=proj();
+  if($('v-new'))$('v-new').onclick=()=>venueForm(null);
+  document.querySelectorAll('[data-v-edit]').forEach(b=>b.onclick=()=>venueForm(b.dataset.vEdit));
+  document.querySelectorAll('[data-v-del]').forEach(b=>b.onclick=()=>{
+    if(!confirm('Удалить?'))return;
+    p.venues=p.venues.filter(v=>v.id!==b.dataset.vDel);touch(p);persist();render();
+  });
+}
+function venueForm(id){
+  const p=proj(),ed=!!id;
+  const v=ed?p.venues.find(x=>x.id===id):{id:uid(),name:'',address:'',sport:'',date:'',criteria:JSON.parse(JSON.stringify(DC)),scores:{},pros:'',cons:'',impressions:'',cost:'',limits:'',factsToCheck:''};
+  if(!v)return;
+  modal(ed?'Изменить':'Новая площадка',`
+    <div class="grid c2">
+      <div class="field"><label>Название</label><input id="v-name" value="${esc(v.name)}"></div>
+      <div class="field"><label>Спорт</label><input id="v-sport" value="${esc(v.sport)}"></div>
+      <div class="field"><label>Адрес</label><input id="v-address" value="${esc(v.address||'')}"></div>
+      <div class="field"><label>Дата</label><input id="v-date" type="date" value="${esc(v.date||'')}"></div>
+      <div class="field"><label>Стоимость</label><input id="v-cost" value="${esc(v.cost||'')}"></div>
+      <div class="field"><label>Ограничения</label><input id="v-limits" value="${esc(v.limits||'')}"></div>
+    </div>
+    <h3 style="margin-top:12px">Оценки</h3><div id="v-crit"></div>
+    <div class="field"><label>Плюсы</label><textarea id="v-pros">${esc(v.pros)}</textarea></div>
+    <div class="field"><label>Минусы</label><textarea id="v-cons">${esc(v.cons)}</textarea></div>
+    <div class="field"><label>Впечатления</label><textarea id="v-imp">${esc(v.impressions)}</textarea></div>
+    <div class="field"><label>Что проверить</label><textarea id="v-facts">${esc(v.factsToCheck||'')}</textarea></div>
+    <div class="row" style="margin-top:12px"><button class="btn pri" id="v-save">Сохранить</button><button class="btn gho" id="v-cancel">Отмена</button></div>`);
+  renderCrit();
+  function renderCrit(){
+    $('v-crit').innerHTML=v.criteria.map(c=>`<div class="field"><label>${esc(c.name)}</label><div class="rs" data-crit="${esc(c.id)}">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button type="button" data-n="${n}" class="${+v.scores[c.id]===n?'on':''}">${n}</button>`).join('')}</div></div>`).join('');
+    document.querySelectorAll('#v-crit .rs').forEach(s=>s.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+      v.scores[s.dataset.crit]=+b.dataset.n;s.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    }));
+  }
+  $('v-cancel').onclick=closeModal;
+  $('v-save').onclick=()=>{
+    const g=id=>$(id).value;
+    const o={id:v.id,name:g('v-name').trim()||'Без названия',sport:g('v-sport'),address:g('v-address'),date:g('v-date'),cost:g('v-cost'),limits:g('v-limits'),pros:g('v-pros'),cons:g('v-cons'),impressions:g('v-imp'),factsToCheck:g('v-facts'),criteria:v.criteria,scores:v.scores};
+    if(ed){const idx=p.venues.findIndex(x=>x.id===v.id);p.venues[idx]=o}else p.venues.push(o);
+    touch(p);persist();closeModal();render();toast('Сохранено','ok');
+  };
+}
+
+/* --- facts --- */
+function renderFacts(){
+  const p=proj();
+  return`<h1>Факты</h1>
+  <p class="mut" style="margin-top:0;font-size:13px">Факты не подтверждаются автоматически.</p>
+  <div class="card" style="margin-bottom:14px">
+    <div class="grid c2">
+      <div class="field" style="grid-column:1/-1"><label>Утверждение</label><input id="f-st"></div>
+      <div class="field"><label>Источник</label><input id="f-src"></div>
+      <div class="field"><label>Статус</label><select id="f-status">${FS.map(s=>`<option>${esc(s)}</option>`).join('')}</select></div>
+      <div class="field"><label>Дата</label><input id="f-date" type="date"></div>
+      <div class="field"><label>Примечание</label><input id="f-note"></div>
+    </div>
+    <button class="btn pri" id="f-add">+ Добавить</button>
+  </div>
+  ${p.facts.length?`<div class="list">${p.facts.map(f=>`<div class="card"><div class="crow"><div style="flex:1;min-width:0"><div style="font-weight:700">${esc(f.statement)}</div><div class="mut" style="font-size:12px">${esc(f.source||'—')} · ${esc(f.date||'—')}</div>${f.note?`<div class="mut" style="font-size:12px">${esc(f.note)}</div>`:''}</div><div class="row"><span class="bdg ${f.status==='Подтверждено'?'ok':f.status==='Не использовать'?'bd':f.status==='Нужно уточнить'?'wn':''}">${esc(f.status)}</span><button class="btn sm" data-f-edit="${esc(f.id)}">✎</button><button class="btn sm dng" data-f-del="${esc(f.id)}">✕</button></div></div></div>`).join('')}</div>`:'<div class="empty">Фактов нет.</div>'}`;
+}
+function afterFacts(){
+  const p=proj();
+  $('f-add').onclick=()=>{
+    const st=$('f-st').value.trim();if(!st){toast('Введите утверждение','err');return}
+    p.facts.push({id:uid(),statement:st,source:$('f-src').value,status:$('f-status').value,date:$('f-date').value,note:$('f-note').value});
+    touch(p);persist();render();toast('Добавлено','ok');
+  };
+  document.querySelectorAll('[data-f-edit]').forEach(b=>b.onclick=()=>{
+    const f=p.facts.find(x=>x.id===b.dataset.fEdit);if(!f)return;
+    modal('Изменить',`<div class="field"><label>Утверждение</label><input id="ff-st" value="${esc(f.statement)}"></div><div class="field"><label>Источник</label><input id="ff-src" value="${esc(f.source)}"></div><div class="field"><label>Статус</label><select id="ff-status">${FS.map(s=>`<option ${s===f.status?'selected':''}>${esc(s)}</option>`).join('')}</select></div><div class="field"><label>Дата</label><input id="ff-date" type="date" value="${esc(f.date||'')}"></div><div class="field"><label>Примечание</label><input id="ff-note" value="${esc(f.note||'')}"></div><div class="row" style="margin-top:12px"><button class="btn pri" id="ff-save">Сохранить</button><button class="btn gho" id="ff-cancel">Отмена</button></div>`);
+    $('ff-cancel').onclick=closeModal;
+    $('ff-save').onclick=()=>{f.statement=$('ff-st').value;f.source=$('ff-src').value;f.status=$('ff-status').value;f.date=$('ff-date').value;f.note=$('ff-note').value;touch(p);persist();closeModal();render()};
+  });
+  document.querySelectorAll('[data-f-del]').forEach(b=>b.onclick=()=>{
+    if(!confirm('Удалить?'))return;
+    p.facts=p.facts.filter(x=>x.id!==b.dataset.fDel);touch(p);persist();render();
+  });
+}
+
+/* --- edit notes --- */
+function renderEditNotes(){
+  const p=proj();
+  return`<h1>Монтаж</h1>
+  ${p.shootGlobalNotes?`<div class="card"><h3>Общие</h3><div>${n2b(p.shootGlobalNotes)}</div></div>`:''}
+  <div class="grid c2" style="margin-top:12px">
+    <div class="card"><h3>Удачные моменты</h3><ul style="margin:8px 0 0 18px">${Object.entries(p.shootNotes).filter(([id,n])=>n&&n.trim()).map(([id,n])=>{const s=findScene(p,id);return`<li style="margin-bottom:6px"><b>${esc(s?s.title:'—')}:</b> ${n2b(n)}</li>`}).join('')||'<li class="mut">Нет</li>'}</ul></div>
+    <div class="card"><h3>Переснять</h3><ul style="margin:8px 0 0 18px">${Object.keys(p.shootReshoot).map(id=>{const s=findScene(p,id);return`<li>${esc(s?s.title:'—')}</li>`}).join('')||'<li class="mut">Нет</li>'}</ul></div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3>Доп. пункты</h3>
+    <div class="grid c2">
+      <div class="field"><label>Тип</label><select id="en-type"><option>таймкод</option><option>перебивка</option><option>шутка</option><option>звук</option><option>Shorts</option><option>исправление</option></select></div>
+      <div class="field"><label>Сцена</label><select id="en-scene"><option value="">—</option>${Object.values(p.scripts).flatMap(s=>s.scenes).map(sc=>`<option value="${esc(sc.id)}">${esc(sc.title)}</option>`).join('')}</select></div>
+      <div class="field" style="grid-column:1/-1"><label>Описание</label><input id="en-text"></div>
+    </div>
+    <button class="btn pri" id="en-add">+ Добавить</button>
+  </div>
+  ${p.editNotes.length?`<div class="list" style="margin-top:12px">${p.editNotes.map(e=>{const s=e.sceneId?findScene(p,e.sceneId):null;return`<div class="li"><div><span class="bdg">${esc(e.type)}</span> ${s?`<span class="bdg">${esc(s.title)}</span>`:''} ${n2b(e.text)}</div><button class="btn sm dng" data-en-del="${esc(e.id)}">✕</button></div>`}).join('')}</div>`:''}
+  <div class="card" style="margin-top:16px"><button class="btn" id="en-copy">📋 Скопировать монтажный лист</button></div>`;
+}
+function afterEditNotes(){
+  const p=proj();
+  $('en-add').onclick=()=>{
+    const t=$('en-text').value.trim();if(!t){toast('Введите описание','err');return}
+    p.editNotes.push({id:uid(),type:$('en-type').value,sceneId:$('en-scene').value||null,text:t});
+    touch(p);persist();render();
+  };
+  document.querySelectorAll('[data-en-del]').forEach(b=>b.onclick=()=>{p.editNotes=p.editNotes.filter(x=>x.id!==b.dataset.enDel);touch(p);persist();render()});
+  $('en-copy').onclick=async()=>{
+    const L=['МОНТАЖ — '+p.title,'','Общие:',p.shootGlobalNotes||'—','','По сценам:'];
+    Object.entries(p.shootNotes).forEach(([id,n])=>{if(!n||!n.trim())return;const s=findScene(p,id);L.push('- '+(s?s.title:'—')+': '+n)});
+    L.push('','Переснять:');Object.keys(p.shootReshoot).forEach(id=>{const s=findScene(p,id);L.push('- '+(s?s.title:'—'))});
+    L.push('','Доп:');p.editNotes.forEach(e=>{const s=e.sceneId?findScene(p,e.sceneId):null;L.push(`- [${e.type}]${s?' ['+s.title+']':''} ${e.text}`)});
+    const ok=await copyText(L.join('\n'));toast(ok?'Скопировано':'Не удалось',ok?'ok':'err');
+  };
+}
+
+/* --- publish --- */
+function renderPublish(){
+  const p=proj(),u=p.publish||{};
+  return`<h1>Публикация</h1>
+  <div class="card"><h3>Названия</h3><textarea id="pub-titles">${esc((u.titles||[]).join('\n'))}</textarea><button class="btn" id="pub-gen-titles" style="margin-top:8px">Промпт названий</button></div>
+  <div class="card" style="margin-top:12px"><h3>Обложка</h3><input id="pub-cover" value="${esc(u.coverText||'')}"></div>
+  <div class="card" style="margin-top:12px"><h3>Описание</h3><textarea id="pub-desc" style="min-height:140px">${esc(u.description||'')}</textarea><button class="btn" id="pub-gen-desc" style="margin-top:8px">Промпт описания</button></div>
+  <div class="card" style="margin-top:12px"><h3>Закреп</h3><textarea id="pub-pin">${esc(u.pinnedComment||'')}</textarea></div>
+  <div class="card" style="margin-top:12px"><h3>Вопросы аудитории</h3><textarea id="pub-ques">${esc(u.audienceQuestions||'')}</textarea></div>
+  <div class="card" style="margin-top:12px"><h3>Shorts</h3><textarea id="pub-shorts">${esc(u.shortIdeas||'')}</textarea></div>
+  <div class="card" style="margin-top:12px"><h3>Главы</h3><textarea id="pub-chapters" style="min-height:120px">${esc(u.chapters||'')}</textarea></div>
+  <div class="row" style="margin-top:14px"><button class="btn pri" id="pub-save">Сохранить</button><button class="btn" id="pub-gen-all">📋 Общий промпт</button></div>`;
+}
+function afterPublish(){
+  const p=proj();
+  $('pub-save').onclick=()=>{
+    p.publish={titles:$('pub-titles').value.split('\n').map(x=>x.trim()).filter(Boolean),coverText:$('pub-cover').value,description:$('pub-desc').value,pinnedComment:$('pub-pin').value,audienceQuestions:$('pub-ques').value,shortIdeas:$('pub-shorts').value,chapters:$('pub-chapters').value};
+    touch(p);persist();toast('Сохранено','ok');
+  };
+  $('pub-gen-titles').onclick=()=>promptDialog('Промпт: названия',publishPrompt(p,'titles'));
+  $('pub-gen-desc').onclick=()=>promptDialog('Промпт: описание',publishPrompt(p,'description'));
+  $('pub-gen-all').onclick=()=>promptDialog('Промпт: публикация',publishPrompt(p,'all'));
+}
+function publishPrompt(p,mode){
+  const s=activeScript(p);
+  const sc=s?s.scenes.map((x,i)=>`${i+1}. ${x.title} — ${x.goal||''}`).join('\n'):'—';
+  const base=`Продюсер YouTube-канала «РАЗГИЛЬДЯИ». Живой, дружеский, без пафоса.\nПроект: ${p.title}\nКонцепция: ${p.concept.goal||''} ${p.concept.question||''}\nСцены:\n${sc}\n`;
+  if(mode==='titles')return base+'\nЗадача: 6–8 названий (40–70 знаков), разные интонации.';
+  if(mode==='description')return base+'\nЗадача: описание 3–5 абзацев, первые 2 строки — самые важные.';
+  return base+'\nЗадача: пакет публикации — названия, описание, обложка, закреп, вопросы, Shorts, шаблон глав.';
+}
+function promptDialog(t,p){
+  modal(t,`<pre class="prompt">${esc(p)}</pre><div class="row" style="margin-top:12px"><button class="btn pri" id="pd-copy">📋 Скопировать</button><button class="btn" id="pd-open">Открыть DeepSeek ↗</button></div>`);
+  $('pd-copy').onclick=async()=>{const ok=await copyText(p);toast(ok?'Скопировано':'Не удалось',ok?'ok':'err')};
+  $('pd-open').onclick=()=>window.open('https://chat.deepseek.com/','_blank');
+}
+
+/* --- prompts --- */
+const PL=[
+  {id:'ideas',t:'Генерация идей',b:p=>ideaPrompt({format:'любой',topic:p.title,city:'',duration:'',budget:'',limits:'',mood:'живое с юмором',diff:'средняя',extra:'выполнимо вдвоём'})},
+  {id:'compare',t:'Сравнение идей',b:p=>`Сравни идеи для «РАЗГИЛЬДЯИ». Проект: ${p.title}. Критерии: визуальность, выполнимость вдвоём, оригинальность, риски. Таблица + рекомендация.`},
+  {id:'concept',t:'Концепция',b:p=>`Помоги уточнить концепцию «${p.title}». Цель: ${p.concept.goal||'—'}. Вопрос: ${p.concept.question||'—'}. Задай 3–4 вопроса и 5–7 ключевых событий.`},
+  {id:'script',t:'Сценарий',b:p=>`Сценарий «${p.title}». Хук 5–15 сек → вступление → место → тест → испытания → реакции → плюсы/минусы → оценка → финал. Для каждой сцены: цель, длительность, реплики, действия, кадры, перебивки, звук, риски.`},
+  {id:'script_venue',t:'Сценарий площадки',b:p=>`Обзор площадки «${p.title}». Сцены: подход, общий, оборудование крупно, пробы, плюсы, минусы, оценка. Не выдумывай факты.`},
+  {id:'script_sport',t:'Сценарий спорта',b:p=>`Тест вида спорта «${p.title}». Правила, экипировка, первые попытки, ошибки, прогресс, вердикт.`},
+  {id:'rating',t:'Рейтинг',b:p=>`Рейтинг площадок «${p.title}». Критерии: безопасность, разнообразие, доступность, чистота, атмосфера, впечатление.`},
+  {id:'shots',t:'Список кадров',b:p=>{const s=activeScript(p);const sc=s?s.scenes.map((x,i)=>`${i+1}. ${x.title}`).join('\n'):'—';return`Список кадров. Сцены:\n${sc}\nДля каждой: общий, средний, 2–3 крупных, 1–2 перебивки.`}},
+  {id:'host',t:'Ведущему',b:p=>{const s=activeScript(p);const sc=s?s.scenes.map((x,i)=>`${i+1}. ${x.title}: ${x.hostSays||''}`).join('\n'):'—';return`Шпаргалка ведущему.\nСцены:\n${sc}\nТезисы, фразы, вопросы.`}},
+  {id:'facts',t:'Факты',b:p=>{const l=p.facts.map(f=>'- '+f.statement).join('\n')||'—';return`Какие факты проверить. Список:\n${l}\nИсточники — не подтверждай сам.`}},
+  {id:'edit',t:'Монтаж',b:p=>{const s=activeScript(p);const sc=s?s.scenes.map((x,i)=>`${i+1}. ${x.title}`).join('\n'):'—';return`Монтажный лист «${p.title}».\nСцены:\n${sc}`}},
+  {id:'publish',t:'Публикация',b:p=>publishPrompt(p,'all')},
+  {id:'shorts',t:'Shorts',b:p=>{const s=activeScript(p);const sc=s?s.scenes.map((x,i)=>`${i+1}. ${x.title}`).join('\n'):'—';return`5–7 идей Shorts из «${p.title}».\nСцены:\n${sc}`}},
+  {id:'rewrite',t:'Переработка',b:p=>{const s=activeScript(p);const body=s?s.scenes.map((x,i)=>`${i+1}. ${x.title}: ${x.hostSays||''}`).join('\n'):'—';return`Перепиши живее сценарий «${p.title}».\nТекст:\n${body}`}},
+  {id:'improve',t:'Улучшение',b:p=>`Проанализируй сценарий «${p.title}». Провисающие сцены, неестественные реплики, недостающие кадры. Дай конкретные замены.`}
+];
+function renderPrompts(){
+  const p=proj();
+  return`<h1>Промпты</h1><p class="mut" style="margin-top:0;font-size:13px">Используют данные проекта «${esc(p.title)}».</p>
+  <div class="grid c2">${PL.map(t=>`<div class="card"><h3>${esc(t.t)}</h3><div class="row"><button class="btn sm pri" data-pr="${esc(t.id)}">Сформировать</button><button class="btn sm" data-pr-open="${esc(t.id)}">DeepSeek ↗</button></div><div class="field" style="margin-top:10px"><label>Сохранённый ответ</label><textarea data-pr-result="${esc(t.id)}" style="min-height:60px">${esc(state.prompts[t.id+':'+p.id]||'')}</textarea></div><button class="btn sm" data-pr-save="${esc(t.id)}">Сохранить</button></div>`).join('')}</div>`;
+}
+function afterPrompts(){
+  const p=proj();
+  document.querySelectorAll('[data-pr]').forEach(b=>b.onclick=()=>{const t=PL.find(x=>x.id===b.dataset.pr);if(t)promptDialog('Промпт: '+t.t,t.b(p))});
+  document.querySelectorAll('[data-pr-open]').forEach(b=>b.onclick=()=>window.open('https://chat.deepseek.com/','_blank'));
+  document.querySelectorAll('[data-pr-save]').forEach(b=>b.onclick=()=>{const id=b.dataset.prSave;const ta=document.querySelector(`[data-pr-result="${id}"]`);state.prompts[id+':'+p.id]=ta.value;persist();toast('Сохранено','ok')});
+}
+
+/* ============================================================
+   DATA TAB — вся работа с файлами здесь, и только здесь
+   ============================================================ */
+function renderData(){
+  const p=proj();
+  const mode={idb:'IndexedDB (надёжно)',ls:'localStorage (ограничено ~5 МБ)',memory:'в памяти (НЕ сохраняется!)',unknown:'не определено'}[storage.mode()]||'не определено';
+  return`<h1>📦 Данные</h1>
+  <p class="mut" style="margin-top:0">Здесь всё про файлы: экспорт, импорт, состояние хранилища. Импорт в другие разделы не встроен специально — чтобы ничего не мешало работе.</p>
+
+  <div class="card" style="margin-bottom:14px">
+    <h3>Состояние хранилища</h3>
+    <p><b>Режим:</b> ${mode}</p>
+    <p style="font-size:13px;color:var(--mt)">Данные хранятся локально в этом браузере. Разные браузеры — разные базы. Синхронизация между устройствами — только через JSON-файлы вручную.</p>
+    ${storage.isPersistent()?'<p class="bdg ok">Сохранение работает</p>':'<p class="bdg bd">Сохранение не работает — делай экспорт!</p>'}
+  </div>
+
+  <div class="grid c2">
+    <div class="card">
+      <h3>⭳ Экспорт</h3>
+      <p style="font-size:13px;color:var(--mt)">Скачать данные в JSON-файл на устройство.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+        <button class="btn pri" id="data-export-project">⭳ Текущий проект: «${esc(p.title)}»</button>
+        <button class="btn" id="data-export-all">⭳ Полная резервная копия (все проекты + идеи)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⭱ Импорт</h3>
+      <p style="font-size:13px;color:var(--mt)">Загрузить JSON, скачанный ранее (с этого или другого устройства).</p>
+      <div id="dropzone" class="drop" style="margin-top:12px">
+        <div style="font-size:32px;margin-bottom:8px">📂</div>
+        <div><b>Перетащи файл сюда</b></div>
+        <div class="mut" style="font-size:12px;margin:6px 0 12px">или</div>
+        <button class="btn pri" id="data-pick-file" type="button">Выбрать файл</button>
+        <div class="mut" style="font-size:11px;margin-top:8px">.json, до 20 МБ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>Что делать на двух устройствах</h3>
+    <ol style="margin:8px 0 0 18px;font-size:14px;line-height:1.7">
+      <li>На компьютере: работаешь → «⭳ Текущий проект» → файл.</li>
+      <li>Передаёшь файл на телефон (мессенджер, USB, облако).</li>
+      <li>На телефоне: этот же раздел → «Выбрать файл» → импорт → «Добавить».</li>
+      <li>Работаешь в «Съёмке», ставишь заметки.</li>
+      <li>Обратно: «⭳ Текущий проект» → файл → на компьютер.</li>
+      <li>На компьютере: импорт → «Заменить» (или «Сохранить обе»).</li>
+    </ol>
+    <p class="mut" style="font-size:12px;margin-top:10px">Автоматического слияния нет. Если сомневаешься, какая версия новее — «Сохранить обе».</p>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>Опасная зона</h3>
+    <button class="btn dng" id="data-reset">Сбросить все данные и начать заново</button>
+    <p class="mut" style="font-size:12px;margin-top:8px">Удалит все проекты и идеи из этого браузера. Сначала сделай экспорт!</p>
+  </div>`;
+}
+function afterData(){
+  $('data-export-project').onclick=()=>exportProject(proj());
+  $('data-export-all').onclick=exportAll;
+  $('data-pick-file').onclick=()=>pickFile();
+  $('data-reset').onclick=()=>{
+    if(!confirm('Удалить ВСЕ данные из этого браузера?'))return;
+    if(!confirm('Точно? Сначала сделай экспорт, если нужно.'))return;
+    if(confirm('Скачать резервную копию перед сбросом?'))exportAll();
+    try{
+      state=defaultState();pid=state.projects[0].id;
+      storage.set(state).catch(()=>{});
+      persist();render();toast('Данные сброшены','ok');
+    }catch(e){toast('Ошибка: '+e.message,'err')}
+  };
+
+  // Dropzone
+  const dz=$('dropzone');
+  if(dz){
+    ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();dz.classList.add('over')}));
+    ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();dz.classList.remove('over')}));
+    dz.addEventListener('drop',e=>{
+      const f=e.dataTransfer.files && e.dataTransfer.files[0];
+      if(f) readImportFile(f);
+    });
+  }
+}
+
+/* --- файловый диалог: создаётся ТОЛЬКО здесь, по кнопке --- */
+function pickFile(){
+  const inp=document.createElement('input');
+  inp.type='file';
+  inp.accept='.json,application/json';
+  // Не добавляем в DOM — современные браузеры это позволяют
+  inp.onchange=()=>{
+    const f=inp.files && inp.files[0];
+    if(f) readImportFile(f);
+    inp.value='';
+  };
+  try{ inp.click(); }
+  catch(e){
+    // fallback для старых браузеров: временно добавляем в DOM и удаляем
+    inp.style.cssText='position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0';
+    document.body.appendChild(inp);
+    inp.click();
+    setTimeout(()=>{ try{inp.remove()}catch(_){} }, 60000);
+  }
+}
+function readImportFile(file){
+  if(!file){ toast('Файл не выбран','err'); return; }
+  if(file.size > 20*1024*1024){ toast('Файл слишком большой (>20 МБ)','err'); return; }
+  const r=new FileReader();
+  r.onload=()=>{
+    let d;try{d=JSON.parse(r.result)}catch(e){toast('Невалидный JSON: '+e.message,'err');return}
+    const errs=validateImport(d);
+    if(errs.length){
+      modal('Импорт отклонён',`<p class="bdg bd">Файл не прошёл проверку</p><ul style="margin:12px 0 0 18px">${errs.map(e=>`<li>${esc(e)}</li>`).join('')}</ul><p class="mut" style="font-size:13px;margin-top:12px">Данные не изменены.</p><button class="btn" id="imp-err" style="margin-top:12px">Закрыть</button>`);
+      $('imp-err').onclick=closeModal;
+      return;
+    }
+    if(d.exportType==='full')importFull(d);else importProjectFlow(d);
+  };
+  r.onerror=()=>toast('Ошибка чтения файла','err');
+  r.readAsText(file);
+}
+
+/* --- export --- */
+function exportAll(){
+  downloadJSON({schemaVersion:SV,appVersion:AV,exportedAt:now(),exportType:'full',projects:state.projects,ideas:state.ideas,prompts:state.prompts},'sporthub-full-');
+  toast('Копия скачана','ok');
+}
+function exportProject(p){
+  if(!p){toast('Не найден','err');return}
+  const safe=p.title.replace(/[^\wа-яА-ЯёЁ\- ]/g,'').trim().replace(/\s+/g,'_').slice(0,40)||'project';
+  downloadJSON({schemaVersion:SV,appVersion:AV,exportedAt:now(),exportType:'project',project:p},'sporthub-'+safe+'-');
+  toast('Проект экспортирован','ok');
+}
+function downloadJSON(obj,prefix){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=prefix+now().slice(0,19).replace(/[:T]/g,'-')+'.json';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* --- import --- */
+function validateImport(d){
+  const e=[];
+  if(!d||typeof d!=='object'||Array.isArray(d)){e.push('Файл должен содержать JSON-объект');return e}
+  if(typeof d.schemaVersion!=='number'||!Number.isFinite(d.schemaVersion))e.push('Нет корректного schemaVersion');
+  else if(d.schemaVersion>SV)e.push(`Файл новее (v${d.schemaVersion})`);
+  if(d.exportType==='full'){
+    if(!Array.isArray(d.projects)||!d.projects.length)e.push('Нет проектов');
+    else if(d.projects.some(p=>!p||typeof p!=='object'||Array.isArray(p)))e.push('Список проектов содержит некорректные элементы');
+    if(d.ideas!=null&&!Array.isArray(d.ideas))e.push('Поле ideas должно быть массивом');
+    if(d.prompts!=null&&(typeof d.prompts!=='object'||Array.isArray(d.prompts)))e.push('Поле prompts должно быть объектом');
+  }else if(d.exportType==='project'){
+    if(!d.project||typeof d.project!=='object'||Array.isArray(d.project))e.push('Нет корректного project');
+    else if(!d.project.id)e.push('У проекта нет id');
+  }else e.push('Неизвестный exportType');
+  return e;
+}
+function importFull(d){
+  const exist=new Set(state.projects.map(p=>p.id));
+  const conflict=d.projects.map(p=>p.id).filter(id=>exist.has(id));
+  modal('Импорт полной копии',`<p><b>Экспортирован:</b> ${esc(fmt(d.exportedAt))}</p><p><b>Схема:</b> v${d.schemaVersion}</p><p><b>Проектов:</b> ${d.projects.length}</p><p><b>Идей:</b> ${(d.ideas||[]).length}</p><p><b>Совпадает по id:</b> ${conflict.length}</p>${conflict.length?`<ul style="margin:6px 0 0 18px">${conflict.map(id=>{const c=state.projects.find(x=>x.id===id);return`<li>${esc(c?c.title:id)}</li>`}).join('')}</ul>`:''}<hr style="border:0;border-top:1px solid var(--ln);margin:14px 0"><div class="row" style="flex-direction:column;align-items:stretch;gap:8px"><button class="btn pri" id="imp-add">Добавить новые</button><button class="btn" id="imp-full">⚠ Восстановить полную</button><button class="btn gho" id="imp-cancel">Отмена</button></div>`);
+  $('imp-cancel').onclick=closeModal;
+  $('imp-add').onclick=()=>{let a=0,s=0;d.projects.forEach(p=>{if(exist.has(p.id)){s++;return}migrateProject(p);state.projects.push(p);a++});(d.ideas||[]).forEach(i=>{if(!state.ideas.some(x=>x.id===i.id))state.ideas.push(i)});Object.assign(state.prompts,d.prompts||{});persist();closeModal();render();toast(`Добавлено: ${a}, пропущено: ${s}`,'ok')};
+  $('imp-full').onclick=()=>{
+    if(!confirm('Заменить ВСЮ базу?'))return;
+    if(confirm('Скачать резервную копию перед заменой?'))exportAll();
+    try{state.projects=d.projects.map(p=>{migrateProject(p);return p});state.ideas=d.ideas||[];state.prompts=d.prompts||{};pid=state.projects[0].id;persist();closeModal();render();toast('База восстановлена','ok')}catch(e){toast('Ошибка: '+e.message,'err')}
+  };
+}
+function importProjectFlow(d){
+  const inc=d.project,ex=state.projects.find(p=>p.id===inc.id),conf=!!ex;
+  modal('Импорт проекта',`<p><b>Название:</b> ${esc(inc.title||'—')}</p><p><b>Экспортирован:</b> ${esc(fmt(d.exportedAt))}</p><p><b>Обновлён:</b> ${esc(fmt(inc.updatedAt))}</p><p><b>Схема:</b> v${d.schemaVersion}</p>${conf?`<p class="bdg wn">ID уже существует</p><p style="margin-top:8px"><b>Текущая:</b> «${esc(ex.title)}» — ${esc(ex.status)}, ${esc(fmt(ex.updatedAt))}</p><p><b>Импортируемая:</b> «${esc(inc.title)}» — ${esc(inc.status)}, ${esc(fmt(inc.updatedAt))}</p><p class="mut" style="font-size:12px">Автослияния нет.</p><div class="row" style="flex-direction:column;align-items:stretch;gap:8px;margin-top:12px"><button class="btn pri" id="imp-replace">Заменить</button><button class="btn" id="imp-keep">Сохранить обе</button><button class="btn gho" id="imp-cancel">Отмена</button></div>`:`<p class="bdg ok">Конфликта нет</p><div class="row" style="flex-direction:column;align-items:stretch;gap:8px;margin-top:12px"><button class="btn pri" id="imp-add">Добавить</button><button class="btn gho" id="imp-cancel">Отмена</button></div>`}`);
+  $('imp-cancel').onclick=closeModal;
+  if(conf){
+    $('imp-replace').onclick=()=>{
+      if(!confirm('Заменить? Изменения текущей будут потеряны.'))return;
+      try{migrateProject(inc);state.projects[state.projects.findIndex(x=>x.id===inc.id)]=inc;pid=inc.id;persist();closeModal();render();toast('Заменён','ok')}catch(e){toast('Ошибка: '+e.message,'err')}
+    };
+    $('imp-keep').onclick=()=>{
+      try{const c=JSON.parse(JSON.stringify(inc));c.id=uid();c.title=inc.title+' (импорт)';migrateProject(c);state.projects.push(c);persist();closeModal();render();toast('Добавлен как копия','ok')}catch(e){toast('Ошибка: '+e.message,'err')}
+    };
+  }else{
+    $('imp-add').onclick=()=>{try{migrateProject(inc);state.projects.push(inc);pid=inc.id;persist();closeModal();render();toast('Добавлен','ok')}catch(e){toast('Ошибка: '+e.message,'err')}};
+  }
+}
+
+/* --- help --- */
+function showHelp(){
+  const m={idb:'IndexedDB',ls:'localStorage',memory:'в памяти (НЕ сохраняется!)',unknown:'не определено'}[storage.mode()]||'не определено';
+  modal('Справка',`<h3>Хранение: ${m}</h3><p>Данные локально в этом браузере. Очистка — стирает.</p>${m.includes('памяти')?'<p class="bdg bd">Внимание: не сохраняется! Делай экспорт.</p>':''}<h3>Экспорт / Импорт</h3><p>Всё в разделе «📦 Данные» (кнопка в шапке или в сайдбаре). В других разделах файловых полей нет — специально, чтобы ничего не мешало.</p><h3>DeepSeek</h3><p>Ручной режим. Нужен интернет. Остальное офлайн.</p>`);
+}
+
+/* --- init --- */
+function initUI(){
+  document.querySelectorAll('.nav-item').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+  document.querySelectorAll('.bn-item').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+  $('btn-goto-data').onclick=()=>setView('data');
+  $('btn-help').onclick=showHelp;
+  $('sheet-close').onclick=closeSheet;
+  $('more-sheet').onclick=e=>{if(e.target.id==='more-sheet')closeSheet()};
+  $('modal-close').onclick=closeModal;
+  $('modal').onclick=e=>{if(e.target.id==='modal')closeModal()};
+}
+async function boot(){
+  try{await loadState()}catch(e){console.error('load fail:',e);state=defaultState()}
+  if(!state||!Array.isArray(state.projects)||!state.projects.length)state=defaultState();
+  pid=state.projects[0].id;
+  initUI();
+  render();
+  try{await persist()}catch(e){console.warn('persist:',e)}
+  if(!storage.isPersistent()){
+    setTimeout(()=>{
+      modal('Данные не сохраняются',`<p class="bdg bd">Браузер блокирует хранилище</p><p style="margin-top:10px">Приложение работает, но изменения <b>не сохранятся</b> после закрытия вкладки.</p><p><b>Причины:</b> приватный режим, блокировка хранилища, file:// в некоторых браузерах.</p><p><b>Что делать:</b></p><ul style="margin:8px 0 0 18px"><li>Делай «⭳ Экспорт» в разделе «📦 Данные».</li><li>Открой в обычном окне (не приватном).</li><li>Попробуй другой браузер.</li></ul><div class="row" style="margin-top:14px"><button class="btn pri" id="warn-continue">Продолжить</button></div>`);
+      $('warn-continue').onclick=closeModal;
+    },300);
+  }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+</script>
+</body>
+</html>
